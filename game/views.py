@@ -15,7 +15,7 @@ def home_view(request):
     context['title'] = 'project'
     return render(request, template_name='home.html', context=context)
 
-@ensure_csrf_cookie
+@csrf_exempt
 def add_name(request):
     if request.body:
         body = json.loads(request.body.decode("utf-8"))
