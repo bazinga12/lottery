@@ -6,7 +6,7 @@ from django.db import IntegrityError
 from django.forms import model_to_dict
 from django.http import JsonResponse
 from django.shortcuts import render
-from django.views.decorators.csrf import ensure_csrf_cookie
+from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
 from .models import Name
 
 
