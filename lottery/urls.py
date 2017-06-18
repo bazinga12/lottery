@@ -15,7 +15,8 @@ Including another URLconf
     3. Add a URL to urlpatterns:  url(r'^blog/', include(blog_urls))
 """
 from django.conf.urls import url, include
-from django.contrib import admin, static
+from django.contrib import admin
+from django.conf.urls.stati import static
 from game.views import home_view
 from . import settings
 
