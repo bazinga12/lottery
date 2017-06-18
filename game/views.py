@@ -70,7 +70,8 @@ def lottery(request):
     names_list = [str(nm) for nm in Name.objects.all()]
     if len(names_list) == 0:
         context['error'] = {
-            'message': 'Empty database!'
+            'type': 'Empty database',
+            'message': 'Do not make me feel alone! Add Somebody!'
         }
     elif len(names_list) < 3:
         context['winners'] = names_list
