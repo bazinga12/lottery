@@ -1,3 +1,4 @@
+
 function getCookie(name) {
     var cookieValue = null;
     if (document.cookie && document.cookie != '') {
@@ -19,7 +20,7 @@ function csrfSafeMethod(method) {
     return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
 }
 
-$.ajaxSetup({
+window.$.ajaxSetup({
     beforeSend: function(xhr, settings) {
         if (!csrfSafeMethod(settings.type) && !this.crossDomain &&
                 (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url)))) {
