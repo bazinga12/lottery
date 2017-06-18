@@ -1,0 +1,197 @@
+{% load staticfiles %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+          crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
+          integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp"
+          crossorigin="anonymous">
+    <script
+  src="http://code.jquery.com/jquery-1.9.1.js"
+  integrity="sha256-e9gNBsAcA0DBuRWbm0oZfbiCyhjLrI6bmqAl5o+ZjUA="
+  crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+            crossorigin="anonymous"></script>
+    <style>
+        ul{ list-style-type: none}
+        .name-p {
+            display: inline-block;
+            width: 100px;
+        }
+        #error-message{
+            color: red;
+        }
+        #names{
+            float:left;
+            width: 400px;
+        }
+        #lottery{
+            float: left;
+            width: 170px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Lottery</h1>
+    <div id="names">
+        <label for="add">Add a new name</label>
+        <input type="text" id="add">
+        <button id="add-button" class="btn btn-success">Add!</button>
+        <p id="error-message"></p>
+        <ul id="list"></ul>
+    </div>
+    <div id="lottery">
+        <button id="start-game" class="btn btn-primary btn-lg">Lottery!</button>
+        <ul id="winners" class="list-group"></ul>
+    </div>
+</body>
+<script src="{% static 'js/csrf.js' %}"></script>
+<script>
+{#    let namesList = '{{ data }}';#}
+{#    console.log(namesList);#}
+{##}
+{#    document.getElementById('list').onclick = function(event) {#}
+{#        let target = event.target;#}
+{#        while (target !== this) {#}
+{#            if (target.classList.contains("delete-button")) {#}
+{#                target.#}
+{#            }#}
+{#            target = target.parentNode;#}
+{#        }#}
+{#    };#}
+
+    document.addEventListener('DOMContentLoaded', ready);
+    function ready() {
+        const request = $.ajax({
+			type: 'GET',
+			url: "{% url 'game:all' %}"
+		});
+		request.done(function(data){
+		    if(data.error){
+		        console.log(data.error);
+            }
+			else{
+		        console.log(data);
+		        showAll(data.names_list);
+            }
+		});
+    }
+
+	document.getElementById('add-button').onclick = function(){
+	    const addInput = document.getElementById('add');
+	    let name = addInput.value;
+	    addInput.value = '';
+        document.getElementById('error-message').innerHTML = '';
+
+	    const request = $.ajax({
+			type: 'POST',
+			url: "{% url 'game:add' %}",
+			data: JSON.stringify({'name': name})
+		});
+		request.done(function(data){
+		    if(data.error){
+		        console.log(data.error);
+		        $('#error-message').html(`${data.error.type}: ${data.error.message}`);
+            }
+			else{
+		        console.log(data);
+		        showAll(data.names_list);
+            }
+		});
+    };
+
+{#    document.getElementById('show-all').onclick = function () {#}
+{#	    const request = $.ajax({#}
+{#			type: 'GET',#}
+{#			url: '/game/all/'#}
+{#		});#}
+{#		request.done(function(data){#}
+{#		    if(data.error){#}
+{#		        console.log(data.error);#}
+{#		        $('#error-message').html(`${data.error.type}: ${data.error.message}`);#}
+{#            }#}
+{#			else{#}
+{#		        console.log(data);#}
+{#                showAll(data.names_list);#}
+{#            }#}
+{#		});#}
+{#    };#}
+
+    function showAll(namesList){
+        const list = document.getElementById('list');
+        list.innerHTML = '';
+        namesList.forEach((el) => {
+            let li = document.createElement('li');
+
+            let p = document.createElement('p');
+            p.className = 'name-p';
+            p.innerHTML = el + ' ';
+
+            let btn = document.createElement('button');
+            btn.className = 'delete-button btn btn-danger';
+            btn.setAttribute('data-url', `/game/delete/${el}`);
+            btn.innerHTML = 'Delete';
+            btn.onclick = deleteName.bind(btn);
+
+            li.appendChild(p);
+            li.appendChild(btn);
+            list.appendChild(li);
+        });
+    }
+
+    function deleteName(){
+        const request = $.ajax({
+			type: 'POST',
+			url: this.getAttribute('data-url')
+		});
+		request.done(function(data){
+		    if(data.error){
+		        console.log(data.error);
+            }
+			else{
+		        console.log(data);
+		        showAll(data.names_list);
+            }
+		});
+    }
+
+    document.getElementById('start-game').onclick = function(){
+        const request = $.ajax({
+			type: 'GET',
+			url: "{% url 'game:lottery' %}"
+		});
+		request.done(function(data){
+		    if(data.error){
+		        console.log(data.error);
+            }
+			else{
+		        console.log(data);
+		        showWinners(data.winners);
+            }
+		});
+    };
+
+    function showWinners(winners) {
+        const ul = document.getElementById('winners');
+        ul.innerHTML = '';
+        let h5 = document.createElement('h5');
+        h5.textContent = 'The winners are:';
+        ul.appendChild(h5);
+
+        winners.forEach(winner => {
+            let li = document.createElement('li');
+            li.className = 'winner list-group-item';
+            li.innerHTML = `${winner}!`;
+            ul.appendChild(li);
+        })
+    }
+</script>
+</html>
