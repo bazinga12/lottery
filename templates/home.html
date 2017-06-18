@@ -59,7 +59,6 @@
 <script>
     document.addEventListener('DOMContentLoaded', ready);
     function ready() {
-        alert('start');
         const request = $.ajax({
 			type: 'GET',
 			url: "{% url 'game:all' %}"
