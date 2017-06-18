@@ -48,6 +48,7 @@ def get_all(request):
     return JsonResponse(context)
 
 
+@csrf_exempt
 def delete_name(request, name):
     context = dict()
     try:
