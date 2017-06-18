@@ -15,11 +15,15 @@ Including another URLconf
     3. Add a URL to urlpatterns:  url(r'^blog/', include(blog_urls))
 """
 from django.conf.urls import url, include
-from django.contrib import admin
+from django.contrib import admin, static
 from game.views import home_view
+from . import settings
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^game/', include('game.urls')),
     url(r'^$', home_view, name='home'),
 ]
+
+if settings.DEBUG:
+        urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
