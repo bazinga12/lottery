@@ -53,21 +53,44 @@
         <ul id="winners" class="list-group"></ul>
     </div>
 </body>
-<script src="{% static 'js/csrf.js' %}"></script>
 <script>
-{#    let namesList = '{{ data }}';#}
-{#    console.log(namesList);#}
-{##}
-{#    document.getElementById('list').onclick = function(event) {#}
-{#        let target = event.target;#}
-{#        while (target !== this) {#}
-{#            if (target.classList.contains("delete-button")) {#}
-{#                target.#}
-{#            }#}
-{#            target = target.parentNode;#}
-{#        }#}
-{#    };#}
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                 cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                 break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    var csrftoken = getCookie('csrftoken');
 
+    /*
+    The functions below will create a header with csrftoken
+    */
+
+    function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+
+    $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain &&
+                        (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url)))) {
+                // Only send the token to relative URLs i.e. locally.
+                xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+            }
+        }
+    });
+</script>
+<script>
     document.addEventListener('DOMContentLoaded', ready);
     function ready() {
         const request = $.ajax({
@@ -107,23 +130,6 @@
             }
 		});
     };
-
-{#    document.getElementById('show-all').onclick = function () {#}
-{#	    const request = $.ajax({#}
-{#			type: 'GET',#}
-{#			url: '/game/all/'#}
-{#		});#}
-{#		request.done(function(data){#}
-{#		    if(data.error){#}
-{#		        console.log(data.error);#}
-{#		        $('#error-message').html(`${data.error.type}: ${data.error.message}`);#}
-{#            }#}
-{#			else{#}
-{#		        console.log(data);#}
-{#                showAll(data.names_list);#}
-{#            }#}
-{#		});#}
-{#    };#}
 
     function showAll(namesList){
         const list = document.getElementById('list');
