@@ -50,11 +50,10 @@
         <ul id="winners" class="list-group"></ul>
     </div>
 </body>
-<script src="{% static "game/js/csrf.js" %}"></script>
+<script src="{% static 'game/js/jquery.js' %}"></script>
 <script>
     document.addEventListener('load', ready);
     function ready() {
-        function ready() {
         var xhr = new XMLHttpRequest();
 
         xhr.open("GET", "{% url 'game:all' %}", true);
@@ -68,6 +67,7 @@
 
         xhr.send();
     }
+
 
         /*const request = $.ajax({
 			type: 'GET',
@@ -83,7 +83,7 @@
             }
 		});
 		*/
-    }
+
 
 	document.getElementById('add-button').onclick = function(){
 	    const addInput = document.getElementById('add');
