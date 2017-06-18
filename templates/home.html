@@ -73,24 +73,6 @@
             }
 		})
     }
-    /*
-    function ready() {
-
-        const xhr = new XMLHttpRequest();
-
-        xhr.open("GET", "{% url 'game:all' %}", true);
-
-        xhr.onreadystatechange = function(){
-            if (this.readyState !== 4) return;
-            alert(this.response);
-            alert(this.responseText);
-            showAll(JSON.parse(this.responseText).names_list);
-        };
-
-        xhr.send();
-    }
-		*/
-
 
 	document.getElementById('add-button').onclick = function(){
 	    const addInput = document.getElementById('add');
