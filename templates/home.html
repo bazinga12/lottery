@@ -56,8 +56,9 @@
   crossorigin="anonymous"></script>
 <script src="{% static 'game/js/csrf.js' %}"></script>
 <script>
-    document.addEventListener('load', ready);
+    document.addEventListener('DOMContentLoaded', ready);
     function ready() {
+        alert('start');
         const request = $.ajax({
 			type: 'GET',
 			url: "{% url 'game:all' %}"
