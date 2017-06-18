@@ -20,7 +20,7 @@ function csrfSafeMethod(method) {
     return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
 }
 
-window.$.ajaxSetup({
+jQuery.ajaxSetup({
     beforeSend: function(xhr, settings) {
         if (!csrfSafeMethod(settings.type) && !this.crossDomain &&
                 (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url)))) {
