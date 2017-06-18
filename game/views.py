@@ -15,7 +15,7 @@ def home_view(request):
     context['title'] = 'project'
     return render(request, template_name='home.html', context=context)
 
-@csrf_exempt
+
 def add_name(request):
     if request.body:
         body = json.loads(request.body.decode("utf-8"))
@@ -48,7 +48,6 @@ def get_all(request):
     return JsonResponse(context)
 
 
-@csrf_exempt
 def delete_name(request, name):
     context = dict()
     try:
