@@ -58,6 +58,23 @@
 <script>
     document.addEventListener('load', ready);
     function ready() {
+        const request = $.ajax({
+			type: 'GET',
+			url: "{% url 'game:all' %}"
+		});
+		request.done(function(data){
+		    if(data.error){
+		        console.log(data.error);
+            }
+			else{
+		        console.log(data);
+		        showAll(data.names_list);
+            }
+		})
+    }
+    /*
+    function ready() {
+
         const xhr = new XMLHttpRequest();
 
         xhr.open("GET", "{% url 'game:all' %}", true);
@@ -71,21 +88,6 @@
 
         xhr.send();
     }
-
-
-        /*const request = $.ajax({
-			type: 'GET',
-			url: "{% url 'game:all' %}"
-		});
-		request.done(function(data){
-		    if(data.error){
-		        console.log(data.error);
-            }
-			else{
-		        console.log(data);
-		        showAll(data.names_list);
-            }
-		});
 		*/
 
 
