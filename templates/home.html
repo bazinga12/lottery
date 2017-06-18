@@ -58,7 +58,7 @@
 <script>
     document.addEventListener('load', ready);
     function ready() {
-        var xhr = new XMLHttpRequest();
+        const xhr = new XMLHttpRequest();
 
         xhr.open("GET", "{% url 'game:all' %}", true);
 
