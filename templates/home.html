@@ -93,7 +93,22 @@
 <script>
     document.addEventListener('DOMContentLoaded', ready);
     function ready() {
-        const request = $.ajax({
+        function ready() {
+        var xhr = new XMLHttpRequest();
+
+        xhr.open("GET", "{% url 'game:all' %}", true);
+
+        xhr.onreadystatechange = function(){
+            if (this.readyState !== 4) return;
+            alert(this.response);
+            alert(this.responseText);
+            showAll(JSON.parse(this.responseText).names_list);
+        };
+
+        xhr.send();
+    }
+
+        /*const request = $.ajax({
 			type: 'GET',
 			url: "{% url 'game:all' %}"
 		});
@@ -106,6 +121,7 @@
 		        showAll(data.names_list);
             }
 		});
+		*/
     }
 
 	document.getElementById('add-button').onclick = function(){
